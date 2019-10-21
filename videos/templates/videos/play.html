@@ -1,0 +1,144 @@
+{% extends 'videos/basic.html' %}
+{% block body%}
+{% load static %}
+
+<div class="row container-fluid">
+    <div class="col-sm-1 col-md-2  col-lg-2">
+    </div>
+    <div class="col-sm-10 col-md-10  col-lg-7" style="padding-top: 20px">
+         <video src="{{vid.0.vid}}" width="620" height="350" controls>
+  Your browser does not support the video tag.
+</video> 
+<div class="row">
+    <div class="col-12 fb-like"  style="padding-top: 10px;" data-href="http://127.0.0.1:8000/home/{{id}}" data-width="" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+</div>
+<div class="row">
+     <div class="col-12" style="padding-top: 20px;">
+    <b> {{vid.0.date}} </b>
+</div>
+    </div>
+<div class="row">
+
+     
+    <div class="col-12">
+        <b>Title:</b>
+   <b><i class=" text-monospace" style="color: red;">{{vid.0.title}}</i></b>
+    </div></div>
+<div class="row">
+    <div class="col-12">
+    <h4>Genres:  
+        {% for g in genres %}
+        {% if forloop.counter > 1 %}
+        ,
+          {%endif%}
+        <a href="/genre/{{g}}"><b>{{g}}</b></a>
+
+                
+
+                
+
+    
+    
+  
+
+    
+   
+   
+   {% endfor %}
+   </h4>
+</div>
+   </div>
+<div class="row">
+    <img src="/media/facebookAd.png" width="620" height="180" style="padding-top: 20px;">
+</div>
+<div class="row" style="padding-top: 30px">
+    <b>Similar Videos</b>
+    </div>
+    <div class="row">
+    {% for video in recomended%}
+            <div class="col-sm-12 col-md-6  col-lg-4" style="padding-top: 20px">
+                <div class="imgbox">
+                <a href="/media/{{video.id}}"> <img src="/media/{{video.thumb}}" width="190" height="100"></a>
+            </div>
+                <div class="row" style="padding-left:10px;padding-top: 10px">
+                    <b>{{video.title}}
+                    </b>
+                </div>
+                
+            </div>
+           
+       
+            {% endfor%}
+</div>
+<div class="fb-comments row" data-href=http://127.0.0.1:8000/media/{{ id}} data-width="" data-numposts="5">
+    
+
+
+</div>
+<div class="row" style="padding-top: 20px;padding-bottom: 50px;">
+            <div class="col-sm-12 col-md-6 col-lg-4" >
+                <div class="row">
+             <img src="/media/snapchatAd.gif" width="200" height="130">
+            </div>
+            <div class="row">
+                add info shows here
+            </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="row">
+             <img src="/media/GoogleAd.jpg" width="200" height="130">
+            </div>
+             <div class="row">
+                add info shows here
+            </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="row">
+             <img src="/media/facebookAd.png" width="200" height="130">
+            </div>
+             <div class="row">
+                اشتہار کی معلومات یہاں دکھائے گی۔
+
+            </div>
+            </div>
+            
+         
+     
+        </div>       
+        </div>
+        <div class="col-sm-0 col-md-0  col-lg-3">
+            <div class="row">
+            <img src="/media/GoogleAd.jpg" width="300" height="250">
+        </div>
+        <div class="row " style="padding-top:30px">
+            <b>Generes</b>
+        </div>
+        <br>
+        <div class="row">
+             {% for g in allgenres%}
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="/genre/{{g}}"><b>{{g}}</b></a>
+            </div>
+           
+        
+            {% endfor%}
+        </div>
+       
+       
+        <div class="row" style="padding-top:30px">
+            <img src="/media/tideAd.gif" width="300" height="250">
+        </div>
+
+
+
+
+        </div>
+    </div>
+
+    
+
+
+   
+
+
+    {% endblock%}}

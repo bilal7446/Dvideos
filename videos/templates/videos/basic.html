@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DVideos</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Complete Bootstrap 4 Website Layout</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0"></script>
+	<style>
+		.imgbox img{
+			transition: transform 1s;
+
+
+		}
+		.imgbox:hover img{
+			transform: scale(1.2);
+		}
+		.play{
+			position:absolute;
+			
+		}
+
+	</style>
+</head>
+
+<body  style="background-color: #EEEEEE;">
+	<!-- head with logo search bar and link to other site like only hd videos -->
+
+<div class="row container-fluid padding " style="padding-top: 10px;">
+	<div class="col-sm-1 col-md-2 col-lg-2">
+	</div>
+		<div class="col-sm-9 col-md-7 col-lg-7" >
+			<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-6">
+		<a href="/home/1"><img src="/media/DVideos.png"></a>
+	</div>
+	<div class=" col-6">
+		<form action="/search" method="get">
+			<div class=" row" style="padding-top:10px">
+			<div class=" col-8">
+  <div class="form-group">
+    <input type="text" class="form-control" id="name" name='search' placeholder="Search for video">
+  </div>
+</div>
+  		<div class=" col-4">
+        <button type="submit" class="btn btn-success">Submit</button>
+</div>
+    </div>
+    
+</form>
+</div>
+	</div>
+</div>
+
+	<div class="col-sm-2 col-md-3 col-lg-3 text-right">
+		<button type="button" class="btn btn-outline-danger">HD</button>
+		
+
+</div>
+</div>
+
+
+
+
+
+	<!-- where videos will b stored -->
+	 {% block body %} {% endblock %} 
+
+
+	<!-- for ads -->
+
+</body>
+</html>
