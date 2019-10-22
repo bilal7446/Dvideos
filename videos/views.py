@@ -1,122 +1,50 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .models import Video
 import random
 
 
 # Create your views here.
-def index(request,page=1,sort="date",genre=None):
+def index(request,genre=None):
 
+	#getting sort value
+	if request.GET.get('sort') :
+		sort= request.GET.get('sort')
+		print(sort)
+	else:
+		sort="date"
+
+	#sorting objects accept random sort
 	if sort =="random":
-
-		obj=Video.objects.order_by("title")
-	else:
-
-		obj=Video.objects.order_by(sort)
-
-	count=1
-	vid=[]
-	show_amount=12
-
-	no_pages=1    #to check how many pages gonna be made
-	
- 	#used a formula to make amount of content shown on a page and rest goes to other page
-	for v in obj:
-		if count <=page*show_amount and count >= page*show_amount -(show_amount-1):
-			vid.append(v)
-		if count%show_amount==0:
-			no_pages+=1
-		count+=1
-	#logic forhow many page buttons will be shown.
-	if  page-2 <= 1:
-		p1=1
-	else:
-		p1=page-2
-
-	if p1+5>no_pages:
-		p2=no_pages
-		p1=no_pages-4
-		if p1<1:
-			p1=1
-
-	else:
-		p2=p1+4
-	#get all the generes list
-	allgenres=[]
-	for g in Video.objects.values('genres'):
-		result = [x.strip() for x in g.get('genres').split(',')]
-		for r in result:
-
-
-			allgenres.append(r)
-	allgenres=list(set(allgenres))
-	if genre:
-		obj=[]
-		for e in Video.objects.order_by(sort).values():
-			
-				
-			if(genre in e.get('genres')):
-				if not (e in obj):
-					obj.append(e)
-
-
-	if sort=="random":
-		random.shuffle(vid)
-
-
-
-	
-
-	
-
-	return render(request,'videos/index.html',{'vid':vid,'page':page,'no_pages':range(p1,p2+1),'sort':sort,'allgenres':allgenres})
-
-
-def genre(request,genre=None,page=1,sort="date"):
-
-	obj=[]
-	if sort =="random":
-
 		temp=Video.objects.order_by("title")
 	else:
 
 		temp=Video.objects.order_by(sort)
 
-	
-	if genre:
-		for t in temp.values():
-			if genre in t['genres']:
-				obj.append(t )
-	
-
-	count=1
+	#getting videos based on genres if exist and putting in a list called vid
 	vid=[]
-	show_amount=9
+	for t in temp.values():
+		if genre:
+			if genre in t['genres']:
+				vid.append(t)
+		else:
+			vid.append(t)
 
-	no_pages=1    #to check how many pages gonna be made
+	#getting videos based on search value
+	if request.GET.get('search') :
+		search= request.GET.get('search')
+		obj=vid
+		vid=[]
+		for v in obj:
+			if str(search).lower() in v['title'].lower():
+				vid.append(v)
+
+	#random sort happns here
+	if sort=="random":
+		random.shuffle(vid)
 	
- 	#used a formula to make amount of content shown on a page and rest goes to other page
-	for v in obj:
-		if count <=page*show_amount and count >= page*show_amount -(show_amount-1):
-			vid.append(v)
-		if count%show_amount==0:
-			no_pages+=1
-		count+=1
-	#logic forhow many page buttons will be shown.
-	if  page-2 <= 1:
-		p1=1
-	else:
-		p1=page-2
-
-	if p1+5>no_pages:
-		p2=no_pages
-		p1=no_pages-4
-		if p1<1:
-			p1=1
-
-	else:
-		p2=p1+4
-	#get all the generes list
+	#get lif of all the generes that exist
 	allgenres=[]
 	for g in Video.objects.values('genres'):
 		result = [x.strip() for x in g.get('genres').split(',')]
@@ -125,63 +53,16 @@ def genre(request,genre=None,page=1,sort="date"):
 
 			allgenres.append(r)
 	allgenres=list(set(allgenres))
-	if genre:
-		obj=[]
-		for e in Video.objects.values():
-			
-				
-			if(genre in e.get('genres')):
-				if not (e in obj):
-					obj.append(e)
-	if sort=="random":
-		random.shuffle(vid)
 
+	#putting objects in pages
+	paginator = Paginator(vid, 9)
+	page = request.GET.get('page')
+	vid = paginator.get_page(page)
 	
 
 	
 
-	return render(request,'videos/genre.html',{'vid':vid,'page':page,'no_pages':range(p1,p2+1),'sort':sort,'allgenres':allgenres,'genre':genre})
-
-def search(request,page=1):
-	search=request.GET.get('search')
-	
-	obj=[]
-	count=1
-	vid=[]
-	show_amount=12
-
-	no_pages=1    #to check how many pages gonna be made
-	for v in Video.objects.all():
-		if str(search).lower() in v.title.lower():
-			obj.append(v)
-
-
-	for v in obj:
-		if count <=page*show_amount and count >= page*show_amount -(show_amount-1):
-			vid.append(v)
-		if count%show_amount==0:
-			no_pages+=1
-		count+=1
-	if  page-2 <= 1:
-		p1=1
-	else:
-		p1=page-2
-
-	if p1+5>no_pages:
-		p2=no_pages
-		p1=no_pages-4
-		if p1<1:
-			p1=1
-
-	else:
-		p2=p1+4
-
-
-		
-
-
-	return render(request,'videos/search.html',{'vid':vid,'page':page,'no_pages':range(p1,p2+1),'search':search})
-
+	return render(request,'videos/index.html',{'vid':vid,'page':page,'sort':sort,'allgenres':allgenres,'genre':genre})
 def play(request,vid):
 	vidd=Video.objects.filter(id=vid)
 
@@ -215,16 +96,4 @@ def play(request,vid):
 			allgenres.append(r)
 	allgenres=list(set(allgenres))
 
-
-
-
-
-	#for e in gen:
-	#	print(e.get('genres') in genres)
-
-	
-
-	
-	#for q in gen:
-	#	print(q.get('genres'))
 	return render(request,'videos/play.html',{'vid':vidd,'id':vid,'recomended':recomended,'allgenres':allgenres, 'genres':genres})

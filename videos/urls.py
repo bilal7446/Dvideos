@@ -21,14 +21,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('',views.index), 
-    path('home/<int:page><str:sort>',views.index),
-    path('genre/<str:genre>/<int:page><str:sort>',views.genre),
-    path('genre/<str:genre>',views.genre),
-    path('home/<int:page>',views.index),
+    path('home',views.index),
+    path('genre/<str:genre>',views.index),
     path('media/<int:vid>',views.play),
-    path('search',views.search),
-    path('search/<int:page>',views.search),
-
 ]
 
 urlpatterns +=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
